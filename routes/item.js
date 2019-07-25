@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const _ = require("lodash");
 const Item = require("../models/itemSchema.js");
+const validateUser = require("../validator/validator.js");
 
 
 let itemArray = [];
@@ -15,13 +16,22 @@ router.post("/addItem", (req, res) => {
 });
 
 router.post("/add", (req, res) => {
-    const errors = {};
+    const {errors, isValid} = validateUser(req.body);
+
+    if (!isValid) {
+        return res.status(400).json(errors);
+    }        
+
     let newdoc = new Item({
         "username": req.body.username,
         "content": req.body.content
     });
-    newdoc.save().then(() => console.log('complete'));
-})
+
+    newdoc.save().then(() => res.status(200).json({message:"Item created"}))
+
+    .catch(err => res.status(404).json({ noItems: "There are no items"}));
+
+});
 
 router.get("/", (req, res) => {
     res.send(itemArray);
@@ -38,7 +48,7 @@ router.get("/all", (req, res) => {
         res.json(items);
       })
       .catch(err => res.status(404).json({ noItems: "There are no items" }));
-  });
+});
   
 
 router.put("/updateItem/:index", (req, res) => {
@@ -58,7 +68,7 @@ router.put("/update", (req, res) => {
     ).then(({ok, n}) => {
         res.json({ noItemL: "updated" });
     });
-})
+});
 
 router.delete("/deleteItem/:index", (req, res) => {
     let index = req.params.index;
@@ -73,6 +83,6 @@ router.delete("/delete", (req, res) => {
         console.log(ok);
         console.log(n);
     });
-})
+});
 
 module.exports = router;
