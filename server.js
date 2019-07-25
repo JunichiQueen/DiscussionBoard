@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const app = express();
 
+const item = require("./routes/item");
+
 mongoose.connect('mongodb+srv://admin:admin@cluster0-jbwzj.gcp.mongodb.net/test?retryWrites=true&w=majority',
     { useNewUrlParser: true }
     ).then(
@@ -11,8 +13,6 @@ mongoose.connect('mongodb+srv://admin:admin@cluster0-jbwzj.gcp.mongodb.net/test?
     );
     
 
-
-const item = require("./item");
 
 app.use(bodyParser.urlencoded({ extended: false}));
 app.use(bodyParser.json());

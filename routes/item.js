@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const _ = require("lodash");
-const Item = require("./itemSchema.js");
+const Item = require("../models/itemSchema.js");
 
 
 let itemArray = [];
